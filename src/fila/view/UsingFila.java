@@ -6,11 +6,11 @@
 package fila.view;
 
 
-import fila.model.FilaEncadeada;
+import fila.model.Fila;
 
 
 public class UsingFila extends javax.swing.JFrame {
-    FilaEncadeada fila = new FilaEncadeada();
+    Fila fila = new Fila();
    
     public UsingFila() {
         initComponents();
