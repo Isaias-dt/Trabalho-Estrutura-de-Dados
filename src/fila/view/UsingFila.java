@@ -7,10 +7,15 @@ package fila.view;
 
 
 import fila.model.Fila;
+import static java.lang.String.valueOf;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 
 public class UsingFila extends javax.swing.JFrame {
-    Fila fila = new Fila();
+    Fila fila = new Fila(10);
    
     public UsingFila() {
         initComponents();
@@ -31,9 +36,11 @@ public class UsingFila extends javax.swing.JFrame {
         lblPassou = new javax.swing.JLabel();
         lblPrimeiro = new javax.swing.JLabel();
         lblProximo = new javax.swing.JLabel();
-        btnGerarSenha = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        grdSenhas = new javax.swing.JTable();
+        tblSenhas = new javax.swing.JTable();
+        btnDequeue = new javax.swing.JButton();
+        lblFilaCheia = new javax.swing.JLabel();
+        btnGerarSenha1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Painel da Fila");
@@ -64,10 +71,8 @@ public class UsingFila extends javax.swing.JFrame {
         lblProximo.setMaximumSize(new java.awt.Dimension(64, 28));
         lblProximo.setMinimumSize(new java.awt.Dimension(64, 28));
 
-        btnGerarSenha.setText("Gerar Senha");
-
-        grdSenhas.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        grdSenhas.setModel(new javax.swing.table.DefaultTableModel(
+        tblSenhas.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tblSenhas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -90,69 +95,132 @@ public class UsingFila extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        grdSenhas.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(grdSenhas);
-        if (grdSenhas.getColumnModel().getColumnCount() > 0) {
-            grdSenhas.getColumnModel().getColumn(0).setResizable(false);
-            grdSenhas.getColumnModel().getColumn(0).setPreferredWidth(20);
+        tblSenhas.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tblSenhas);
+        if (tblSenhas.getColumnModel().getColumnCount() > 0) {
+            tblSenhas.getColumnModel().getColumn(0).setResizable(false);
+            tblSenhas.getColumnModel().getColumn(0).setPreferredWidth(20);
         }
+
+        btnDequeue.setText("Dequeue");
+        btnDequeue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDequeueActionPerformed(evt);
+            }
+        });
+
+        lblFilaCheia.setForeground(new java.awt.Color(255, 51, 51));
+        lblFilaCheia.setToolTipText("");
+        lblFilaCheia.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lblFilaCheia.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblFilaCheia.setName(""); // NOI18N
+
+        btnGerarSenha1.setText("Gerar Senha");
+        btnGerarSenha1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGerarSenha1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addComponent(lblPassou, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnGerarSenha)
-                        .addGap(65, 65, 65)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblPrimeiro, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(69, 69, 69)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(91, 91, 91)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblProximo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(68, 68, 68))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(37, 37, 37)
+                                .addComponent(jLabel2)
+                                .addGap(63, 63, 63)
+                                .addComponent(jLabel3)
+                                .addGap(66, 66, 66)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(lblPassou, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblPrimeiro, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblProximo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(95, 95, 95))))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(lblFilaCheia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnDequeue, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnGerarSenha1)))
+                        .addGap(129, 129, 129)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblPrimeiro, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPassou, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblProximo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 194, Short.MAX_VALUE)
-                        .addComponent(btnGerarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(65, 65, 65))))
+                        .addComponent(lblPassou, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblPrimeiro, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblProximo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnGerarSenha1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDequeue, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addComponent(lblFilaCheia, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnDequeueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDequeueActionPerformed
+        try{
+            if(!fila.isEmpty()){
+            fila.dequeue();
+            lblPassou.setText(valueOf(fila.front()));
+            }else{
+                JOptionPane.showMessageDialog(null,"Lista fazia");
+                
+            }
+        }catch(Exception ex){
+            
+        }    
+    }//GEN-LAST:event_btnDequeueActionPerformed
+
+    private void btnGerarSenha1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarSenha1ActionPerformed
+        try {
+            if(!fila.isFull()){
+                Random senha = new Random();
+                int aleatorio = senha.nextInt(9999)+1000;
+                fila.enqueue(aleatorio);
+                
+                lblPrimeiro.setText(valueOf(fila.front()));
+                lblProximo.setText(valueOf(fila.getProx()));
+            }else{
+                lblFilaCheia.setText("Fila Cheia Aguarde até abrir vaga.");
+                
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(UsingFila.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+    }//GEN-LAST:event_btnGerarSenha1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -190,14 +258,17 @@ public class UsingFila extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnGerarSenha;
-    public javax.swing.JTable grdSenhas;
+    public javax.swing.JButton btnDequeue;
+    public javax.swing.JButton btnGerarSenha1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblPassou;
-    private javax.swing.JLabel lblPrimeiro;
-    private javax.swing.JLabel lblProximo;
+    public javax.swing.JLabel lblFilaCheia;
+    public javax.swing.JLabel lblPassou;
+    public javax.swing.JLabel lblPrimeiro;
+    public javax.swing.JLabel lblProximo;
+    public javax.swing.JTable tblSenhas;
     // End of variables declaration//GEN-END:variables
+   
 }
