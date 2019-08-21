@@ -12,7 +12,7 @@ package fila.model;
 public class Fila {
     private Object[] elementos;
     private int tamanho, capFila;
-    private Object prim, ult;
+    private Object prim, ult, prox;
     
     public Fila(int capacidade){
         elementos = new Object[capacidade];
@@ -21,18 +21,23 @@ public class Fila {
         
     }
     
-    public void enqueue(Object elemento) throws Exception{
+    public void enqueue(Object elemento){
         if(this.tamanho == 0){
-            this.elementos[tamanho] = elemento;
+            this.prim = this.elementos[tamanho] = elemento;
             tamanho++;
         }else{
             this.elementos[tamanho] = elemento;
-        }   tamanho++;
+            tamanho++;
+        }    
     }
     
-    public Object dequeue(){
-        
-        return null;
+    public void dequeue(){
+        for(int i = 0; i < this.tamanho; i++){
+            
+            this.elementos[i] = this.elementos[i+1];   
+        }
+        this.prim = elementos[0];
+        this.tamanho--;
     }
     
     public int size(){
@@ -43,7 +48,20 @@ public class Fila {
         return this.tamanho == 0;
     }
     
-    public boolean isFull(){
-        return this.tamanho == capFila;        
+    public boolean isFull() throws Exception{
+        return this.tamanho == capFila;
+    }
+    
+    public Object front(){
+        return this.prim;
+    }
+    
+    public Object getProx(){
+        if(isEmpty()){
+           return isEmpty();
+        }else{
+            this.prox = this.elementos[1];
+            return this.prox;
+        }
     }
 }
