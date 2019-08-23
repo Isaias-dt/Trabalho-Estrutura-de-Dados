@@ -12,15 +12,35 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 
 public class UsingFila extends javax.swing.JFrame {
-    Fila fila = new Fila(10);
-   
+    int contador = 0, capacidadeFila;
+    Fila fila;
+       
     public UsingFila() {
-        initComponents();
+        try{
+        fila = new Fila(capacidadeFila);
+        while(true){
+            caixaDialog();
+            if(capacidadeFila > 0){
+                initComponents();        
+                break;
+            }else{
+                
+            }
+        }
+        }catch(Exception e){
+            
+        }
     }
-
+    
+    public int caixaDialog(){
+        return this.capacidadeFila = Integer.parseInt(JOptionPane.showInputDialog (null,"Digite apenas números maiores que 0:")); 
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,6 +64,7 @@ public class UsingFila extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Painel da Fila");
+        setResizable(false);
 
         jLabel2.setText("Já passou:");
 
@@ -71,7 +92,6 @@ public class UsingFila extends javax.swing.JFrame {
         lblProximo.setMaximumSize(new java.awt.Dimension(64, 28));
         lblProximo.setMinimumSize(new java.awt.Dimension(64, 28));
 
-        tblSenhas.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         tblSenhas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -95,6 +115,7 @@ public class UsingFila extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblSenhas.setToolTipText("");
         tblSenhas.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblSenhas);
         if (tblSenhas.getColumnModel().getColumnCount() > 0) {
@@ -191,34 +212,44 @@ public class UsingFila extends javax.swing.JFrame {
 
     private void btnDequeueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDequeueActionPerformed
         try{
-            if(!fila.isEmpty()){
-            fila.dequeue();
-            lblPassou.setText(valueOf(fila.front()));
-            }else{
-                JOptionPane.showMessageDialog(null,"Lista fazia");
+            if(fila.isEmpty()){
+                JOptionPane.showMessageDialog(null,"Fila vazia");
                 
+            }else{
+                fila.dequeue();
+                lblPassou.setText(valueOf(fila.getSenhaPassada()));
+                lblPrimeiro.setText(valueOf(fila.front()));
+                lblProximo.setText(valueOf(fila.getProx()));
+                
+                ((DefaultTableModel) tblSenhas.getModel()).removeRow(0);
+
             }
         }catch(Exception ex){
-            
-        }    
+            Logger.getLogger(UsingFila.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_btnDequeueActionPerformed
 
     private void btnGerarSenha1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarSenha1ActionPerformed
         try {
-            if(!fila.isFull()){
+            if(fila.isFull()){
+                JOptionPane.showMessageDialog(null,"Fila Cheia!\nPor favor aguarde até abrir vaga.");
+            }else{
                 Random senha = new Random();
-                int aleatorio = senha.nextInt(9999)+1000;
+                int aleatorio = (senha.nextInt(10000)+1000);
                 fila.enqueue(aleatorio);
                 
                 lblPrimeiro.setText(valueOf(fila.front()));
-                lblProximo.setText(valueOf(fila.getProx()));
-            }else{
-                lblFilaCheia.setText("Fila Cheia Aguarde até abrir vaga.");
+                if(fila.size() > 0){
+                    lblProximo.setText(valueOf(fila.getProx()));
+                }
+                
+                DefaultTableModel tbl = (DefaultTableModel) tblSenhas.getModel();
+                tbl.addRow(new Object[]{contador++, fila});
                 
             }
         } catch (Exception ex) {
             Logger.getLogger(UsingFila.class.getName()).log(Level.SEVERE, null, ex);
-            
         }
     }//GEN-LAST:event_btnGerarSenha1ActionPerformed
 
