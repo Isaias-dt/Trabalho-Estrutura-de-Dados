@@ -16,30 +16,35 @@ import javax.swing.table.DefaultTableModel;
 
 
 public class UsingFila extends javax.swing.JFrame {
-    int contador = 0, capacidadeFila;
+    int contador = 0; 
+    int capacidadeFila;
     Fila fila;
        
     public UsingFila() {
         try{
-        fila = new Fila(capacidadeFila);
-        while(true){
-            caixaDialog();
-            if(capacidadeFila > 0){
-                initComponents();        
-                break;
-            }else{
-                
+            while(true){
+                capacidadeFila = caixaDialog();
+                if(capacidadeFila > 0 && capacidadeFila!= -1){
+                    //Passando capacidade da fila.
+                    fila = new Fila(capacidadeFila);
+                    initComponents();        
+                    break;
+                }
             }
-        }
-        }catch(Exception e){
-            
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(null, ex.getMessage()+"\nPrograma Finalizado!");
+            System.exit(0);
         }
     }
-    
+   
     public int caixaDialog(){
-        return this.capacidadeFila = Integer.parseInt(JOptionPane.showInputDialog (null,"Digite apenas números maiores que 0:")); 
+        String value = JOptionPane.showInputDialog (null,"Digite apenas números maiores que 0:");
+        if(value.equals("")){
+            return -1;
+        }else{
+            return  Integer.parseInt(value);
+        }
     }
-    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -243,7 +248,7 @@ public class UsingFila extends javax.swing.JFrame {
                 if(fila.size() > 0){
                     lblProximo.setText(valueOf(fila.getProx()));
                 }
-                
+                //Falta mostra cada elemento em um única linha na tabela.
                 DefaultTableModel tbl = (DefaultTableModel) tblSenhas.getModel();
                 tbl.addRow(new Object[]{contador++, fila});
                 

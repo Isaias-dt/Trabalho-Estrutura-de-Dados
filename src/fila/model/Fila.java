@@ -82,8 +82,5 @@ public class Fila {
     @Override
     public String toString(){
         return Arrays.toString(elementos);
-    }
-    
-    
-    
+    }   
 }
