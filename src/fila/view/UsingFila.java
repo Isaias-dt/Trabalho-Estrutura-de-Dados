@@ -32,7 +32,7 @@ public class UsingFila extends javax.swing.JFrame {
                 }
             }
         }catch(Exception ex){
-            JOptionPane.showMessageDialog(null, ex.getMessage()+"\nPrograma Finalizado!");
+            //JOptionPane.showMessageDialog(null, ex.getMessage()+"\nPrograma Finalizado!");
             System.exit(0);
         }
     }
@@ -250,7 +250,7 @@ public class UsingFila extends javax.swing.JFrame {
                 }
                 //Falta mostra cada elemento em um única linha na tabela.
                 DefaultTableModel tbl = (DefaultTableModel) tblSenhas.getModel();
-                tbl.addRow(new Object[]{contador++, fila});
+                tbl.addRow(new Object[]{contador++, fila.exibeElementoTbl()});
                 
             }
         } catch (Exception ex) {
