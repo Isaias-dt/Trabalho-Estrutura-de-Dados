@@ -73,14 +73,14 @@ public class Fila {
     public Object getSenhaPassada(){
         return this.senhaPassada; 
     }
-    //Exibe todos elementos.
-    public String exibeItens(){
-        return Arrays.toString(elementos);
-    }
     
     //Exibi itens da lista com toString sobrescrevendo com @Override.    
     @Override
     public String toString(){
         return Arrays.toString(elementos);
-    }   
+    }
+    //Retorna elemento na tabela.
+    public Object exibeElementoTbl(){
+        return elementos[this.tamanho-1];     
+    }
 }
