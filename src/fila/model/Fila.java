@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class Fila {
     private Object[] elementos;
     private int tamanho;
-    private Object prim, ult, prox, senhaPassada;
+    private Object prim, prox, senhaPassada;
     
     public Fila(int capacidade){
         elementos = new Object[capacidade];
@@ -62,7 +62,7 @@ public class Fila {
     }
     //Retorna o segundo elemento da fila;
     public Object getProx(){
-        if(isEmpty()){
+        if(isEmpty() || this.tamanho == 1){
            return null;
         }else{
             this.prox = this.elementos[1];

@@ -8,6 +8,7 @@ package fila.view;
 
 import fila.model.Fila;
 import static java.lang.String.valueOf;
+import java.rmi.AccessException;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +25,7 @@ public class UsingFila extends javax.swing.JFrame {
         try{
             while(true){
                 capacidadeFila = caixaDialog();
-                if(capacidadeFila > 0 && capacidadeFila!= -1){
+                if(capacidadeFila > 0){
                     //Passando capacidade da fila.
                     fila = new Fila(capacidadeFila);
                     initComponents();        
@@ -32,17 +33,18 @@ public class UsingFila extends javax.swing.JFrame {
                 }
             }
         }catch(Exception ex){
-            //JOptionPane.showMessageDialog(null, ex.getMessage()+"\nPrograma Finalizado!");
+            //JOptionPane.showMessageDialog(null, ex.getMessage(), "Atenção",2);
             System.exit(0);
         }
     }
-   
+    
     public int caixaDialog(){
         String value = JOptionPane.showInputDialog (null,"Digite apenas números maiores que 0:");
-        if(value.equals("")){
+        
+        if(value.equals("") || !value.matches("[0-9]+")){
             return -1;
         }else{
-            return  Integer.parseInt(value);
+            return Integer.parseInt(value);
         }
     }
     
